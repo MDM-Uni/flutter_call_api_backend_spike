@@ -3,6 +3,8 @@ import 'package:call_api_backend/models/customer_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+const stringUrl = "http://localhost:8080/api/v1/customers";
+
 void main() {
   runApp(const MyApp());
 }
@@ -16,15 +18,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title:"Customers"),
@@ -33,7 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 Future<List<Customer>> getCustomers() async{
-  var url = Uri.parse("http://localhost:8080/api/v1/customers");
+  var url = Uri.parse(stringUrl);
   var customers = await Future.delayed(
       const Duration(seconds:15),
       () => http.get(url),
@@ -49,7 +42,9 @@ Future<List<Customer>> getCustomers() async{
 Widget listViewBuilder(context, snap) {
   if (snap.connectionState == ConnectionState.none || !snap.hasData || snap.data==null) {
     //print('project snapshot data is: ${snap.data}');
-    return Container();
+    return const Center(
+      child: Text("Devi accendere il backend.\nLo spike sui Customers con Spring"),
+    );
   }
   return ListView.builder(
     itemCount: snap.data!.length,
